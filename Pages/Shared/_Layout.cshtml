@@ -1,0 +1,102 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - AHInteriorsERP</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/AHInteriorsERP.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="d-flex min-vh-100">
+        <!-- Sidebar -->
+        <aside class="bg-dark text-white p-3" style="width: 260px;">
+            <a class="text-white text-decoration-none d-block mb-4 fs-5 fw-semibold"
+               asp-page="/Index">
+                AHInteriorsERP
+            </a>
+
+            <ul class="nav nav-pills flex-column gap-1">
+
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-page="/Index">Dashboard</a>
+                </li>
+
+                <li class="nav-item sidebar-group">
+                    <a class="nav-link text-white" asp-page="/Customers/Index">Customers</a>
+                    <ul class="sidebar-submenu">
+                        <li><a asp-page="/Customers/Create">Add Customer</a></li>
+                        <li><a asp-page="/Customers/Index">View Customers</a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-item sidebar-group">
+                    <a class="nav-link text-white" asp-page="/Orders/Index">Orders</a>
+                    <ul class="sidebar-submenu">
+                        <li><a asp-page="/Orders/Create">Create Order</a></li>
+                        <li><a asp-page="/Orders/Index">View Orders</a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-item sidebar-group">
+                    <a class="nav-link text-white" asp-page="/Invoices/Index">Invoices</a>
+                    <ul class="sidebar-submenu">
+                        <li><a asp-page="/Invoices/Index">View Invoices</a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-item sidebar-group">
+                    <a class="nav-link text-white" asp-page="/Products/Index">Products</a>
+                    <ul class="sidebar-submenu">
+                        <li><a asp-page="/Products/Create">Add Product</a></li>
+                        <li><a asp-page="/Products/Index">View Products</a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-page="/Reports/Index">Reports</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-page="/Users/Index">Users</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-page="/Profile/Index">Profile</a>
+                </li>
+
+                <li class="nav-item">
+                    <form method="post" asp-page="/Account/Logout" class="m-0">
+                        <button type="submit"
+                                class="nav-link text-white btn btn-link p-0 text-start w-100">
+                            Logout
+                        </button>
+                    </form>
+                </li>
+            </ul>
+
+
+        </aside>
+
+        <!-- Main content -->
+        <div class="flex-grow-1 d-flex flex-column">
+            <main role="main" class="p-4 flex-grow-1">
+                @RenderBody()
+            </main>
+
+            <footer class="border-top text-muted py-3 px-4">
+                &copy; 2026 - AHInteriorsERP -
+                <a asp-page="/Privacy">Privacy</a>
+            </footer>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>

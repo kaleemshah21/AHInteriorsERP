@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34316.72
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AHInteriorsERP", "AHInteriorsERP.csproj", "{BA6E13C0-6ABA-439E-897E-DFAC76CF59CE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BA6E13C0-6ABA-439E-897E-DFAC76CF59CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA6E13C0-6ABA-439E-897E-DFAC76CF59CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA6E13C0-6ABA-439E-897E-DFAC76CF59CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA6E13C0-6ABA-439E-897E-DFAC76CF59CE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AF19702B-0FB2-450C-BD0B-92874C47E34B}
+	EndGlobalSection
+EndGlobal
