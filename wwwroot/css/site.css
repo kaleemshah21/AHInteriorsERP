@@ -1,6 +1,6 @@
-﻿/* ===============================
+﻿/*
    Root + Typography
-   =============================== */
+*/
 :root {
     --primary: #475569; /* slate */
     --primary-dark: #334155; /* darker slate */
@@ -34,9 +34,9 @@ body {
     font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
 }
 
-/* ===============================
+/*
    Headings
-   =============================== */
+ */
 h1, .h1 {
     font-weight: 700;
     letter-spacing: -0.02em;
@@ -47,9 +47,9 @@ h2, .h2 {
     letter-spacing: -0.015em;
 }
 
-/* ===============================
+/*
    Sidebar
-   =============================== */
+ */
 aside.bg-dark {
     background: #0b1220 !important;
     border-right: 1px solid rgba(255,255,255,0.08);
@@ -67,9 +67,9 @@ aside.bg-dark {
             color: #ffffff !important;
         }
 
-/* ===============================
+/*
    Buttons & Links
-   =============================== */
+*/
 .btn {
     border-radius: 10px !important;
     font-weight: 600;
@@ -119,9 +119,9 @@ a {
     }
 
 
-/* ===============================
+/*
    Forms (Create / Edit pages)
-   =============================== */
+ */
 .form-control,
 .form-select,
 textarea {
@@ -136,9 +136,9 @@ textarea {
         box-shadow: 0 0 0 3px rgba(71, 85, 105, 0.18) !important;
     }
 
-/* ===============================
+/*
    Tables (Index pages)
-   =============================== */
+*/
 .table {
     background: var(--card);
     border: 1px solid var(--border);
@@ -183,9 +183,9 @@ textarea {
             color: var(--primary-dark);
         }
 
-/* ===============================
+/*
    Sidebar hover submenu
-   =============================== */
+ */
 .sidebar-group {
     position: relative;
 }
