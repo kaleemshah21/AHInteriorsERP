@@ -36,6 +36,11 @@
                 <span asp-validation-for="Product.StockQuantity" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Product.BasePrice" class="control-label"></label>
+                <input asp-for="Product.BasePrice" class="form-control" />
+                <span asp-validation-for="Product.BasePrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Product.CreatedAt" class="control-label"></label>
                 <input asp-for="Product.CreatedAt" class="form-control" />
                 <span asp-validation-for="Product.CreatedAt" class="text-danger"></span>
