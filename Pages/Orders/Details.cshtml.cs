@@ -21,6 +21,7 @@ namespace AHInteriorsERP.Pages.Orders
         }
 
         public Order Order { get; set; } = default!;
+        public decimal OrderTotal { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -29,7 +30,13 @@ namespace AHInteriorsERP.Pages.Orders
                 return NotFound();
             }
 
-            var order = await _context.Orders.FirstOrDefaultAsync(m => m.OrderID == id);
+            // Load the Order + Customer + OrderItems + Product details
+            var order = await _context.Orders
+                .Include(o => o.Customer)
+                .Include(o => o.OrderItems)
+                    .ThenInclude(oi => oi.Product)
+                .FirstOrDefaultAsync(o => o.OrderID == id.Value);
+
             if (order == null)
             {
                 return NotFound();
@@ -38,6 +45,7 @@ namespace AHInteriorsERP.Pages.Orders
             {
                 Order = order;
             }
+            OrderTotal = Order.OrderItems.Sum(oi => oi.Quantity * oi.UnitPriceAtTime);
             return Page();
         }
     }

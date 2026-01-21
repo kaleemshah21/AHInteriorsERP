@@ -10,6 +10,7 @@
 <p>
     <a asp-page="Create">Create New</a>
 </p>
+<div class="table-responsive">
 <table class="table">
     <thead>
         <tr>
@@ -49,7 +50,7 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.BasePrice)
                 </td>
-            <td>
+            <td class="actions">
                 <a asp-page="./Edit" asp-route-id="@item.ProductID">Edit</a> |
                 <a asp-page="./Details" asp-route-id="@item.ProductID">Details</a> |
                 <a asp-page="./Delete" asp-route-id="@item.ProductID">Delete</a>
@@ -58,3 +59,4 @@
 }
     </tbody>
 </table>
+</div>

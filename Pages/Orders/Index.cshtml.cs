@@ -24,7 +24,11 @@ namespace AHInteriorsERP.Pages.Orders
         public async Task OnGetAsync()
         {
             Order = await _context.Orders
-                .Include(o => o.Customer).ToListAsync();
+            .Include(o => o.Customer)
+            .Include(o => o.OrderItems)
+            .ToListAsync();
+
+
         }
     }
 }
