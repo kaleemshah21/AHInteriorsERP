@@ -29,7 +29,13 @@ namespace AHInteriorsERP.Pages.Orders
                 return NotFound();
             }
 
-            var order = await _context.Orders.FirstOrDefaultAsync(m => m.OrderID == id);
+            var order = await _context.Orders
+                .Include(o => o.Customer)
+                .Include(o => o.OrderItems)
+                    .ThenInclude(oi => oi.Product)
+                .FirstOrDefaultAsync(o => o.OrderID == id.Value);
+
+            
 
             if (order == null)
             {

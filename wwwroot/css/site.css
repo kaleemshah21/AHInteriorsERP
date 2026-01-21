@@ -176,6 +176,32 @@ textarea {
             display: inline-block;
         }
 
+/* Scrollable product list on Order Create page */
+.products-scroll {
+    max-height: 60vh; /* takes up most of the screen */
+    overflow-y: auto; /* vertical scroll inside */
+    overflow-x: hidden;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--card);
+}
+
+    /* Keep the table header visible while scrolling (nice touch) */
+    .products-scroll thead th {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+    }
+
+/* Mobile: let it grow naturally (small screens prefer page scroll) */
+@media (max-width: 575.98px) {
+    .products-scroll {
+        max-height: none;
+        overflow: visible;
+        border: none;
+    }
+}
+
 /*
    Sidebar hover submenu
 */
@@ -222,3 +248,5 @@ textarea {
     transform: rotate(90deg);
     opacity: 0.9;
 }
+
+

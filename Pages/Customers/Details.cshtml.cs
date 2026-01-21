@@ -28,7 +28,11 @@ namespace AHInteriorsERP.Pages.Customers
                 return NotFound();
             }
 
-            var customer = await _context.Customers.FirstOrDefaultAsync(m => m.CustomerID == id);
+            var customer = await _context.Customers
+                .Include(c => c.Orders)
+                    .ThenInclude(o => o.OrderItems)
+                .FirstOrDefaultAsync(m => m.CustomerID == id);
+
             if (customer == null)
             {
                 return NotFound();
