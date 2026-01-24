@@ -4,35 +4,164 @@
     ViewData["Title"] = "Dashboard";
 }
 
-<h1>Dashboard</h1>
+<h1 class="mb-3">Dashboard</h1>
 
 <p class="text-muted mb-4">
-    Welcome to the AHInteriors ERP system. Use the navigation menu to manage customers,
-    products, orders, and invoices.
+    Overview of current system activity and key business metrics.
 </p>
 
-<div class="row g-4">
-
-    <div class="col-md-6">
-        <div class="card p-4">
-            <h5 class="mb-2">System Overview</h5>
-            <p class="mb-0">
-                This application supports core business operations including order processing,
-                inventory management, and invoicing.
-            </p>
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="card p-3">
+            <div class="text-muted">Orders Today</div>
+            <div class="h3 mb-0">@Model.OrdersToday</div>
         </div>
     </div>
 
-    <div class="col-md-6">
-        <div class="card p-4">
-            <h5 class="mb-2">Getting Started</h5>
-            <ul class="mb-0">
-                <li>View and manage customers</li>
-                <li>Add and update products</li>
-                <li>Create and track orders</li>
-                <li>Generate invoices</li>
-            </ul>
+    <div class="col-md-3">
+        <div class="card p-3">
+            <div class="text-muted">Total Sales</div>
+            <div class="h3 mb-0">£@Model.TotalSales.ToString("0.00")</div>
         </div>
     </div>
 
+    <div class="col-md-3">
+        <div class="card p-3">
+            <div class="text-muted">Customers</div>
+            <div class="h3 mb-0">@Model.CustomerCount</div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card p-3">
+            <div class="text-muted">Products</div>
+            <div class="h3 mb-0">@Model.ProductCount</div>
+        </div>
+    </div>
 </div>
+
+<div class="row g-4 align-items-stretch mb-4">
+    <!-- Recent Orders -->
+    <div class="col-lg-7">
+        <div class="card p-4 h-100 d-flex flex-column">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h5 class="mb-0">Recent Orders</h5>
+                <a asp-page="/Orders/Index">View all</a>
+            </div>
+
+            <div class="table-responsive flex-grow-1">
+                <table class="table mb-0">
+                    <thead>
+                        <tr>
+                            <th>Order #</th>
+                            <th>Customer</th>
+                            <th>Status</th>
+                            <th class="text-end">Total</th>
+                            <th class="text-end actions">View</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (!Model.RecentOrders.Any())
+                        {
+                            <tr><td colspan="4" class="text-muted">No recent orders found.</td></tr>
+                        }
+                        else
+                        {
+                            foreach (var o in Model.RecentOrders)
+                            {
+                                <tr>
+                                    <td>#@o.OrderID</td>
+                                    <td>@o.CustomerName</td>
+                                    <td>@o.Status</td>
+                                    <td class="text-end">£@o.Total.ToString("0.00")</td>
+                                    <td class="text-end actions">
+                                        <a asp-page="/Orders/Details" asp-route-id="@o.OrderID">View</a>
+                                    </td>
+
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Low Stock -->
+    <div class="col-lg-5">
+        <div class="card p-4 h-100 d-flex flex-column">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h5 class="mb-0">Low Stock Products</h5>
+                <a asp-page="/Products/Index">View products</a>
+            </div>
+
+            <div class="table-responsive flex-grow-1">
+                <table class="table mb-0">
+                    <thead>
+                        <tr>
+                            <th>SKU</th>
+                            <th>Product</th>
+                            <th class="text-end">Stock</th>
+                            <th class="text-end actions">View</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (!Model.LowStockProducts.Any())
+                        {
+                            <tr><td colspan="3" class="text-muted">No low stock items.</td></tr>
+                        }
+                        else
+                        {
+                            foreach (var p in Model.LowStockProducts)
+                            {
+                                <tr>
+                                    <td>@p.SKU</td>
+                                    <td>@p.ProductName</td>
+                                    <td class="text-end">@p.StockQuantity</td>
+                                    <td class="text-end actions">
+                                        <a asp-page="/Products/Details" asp-route-id="@p.ProductID">View</a>
+                                    </td>
+
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card p-4">
+    <h5 class="mb-3">Quick Actions</h5>
+
+    <div class="row g-3">
+        <div class="col-md-3 col-sm-6">
+            <a asp-page="/Orders/Create" class="btn btn-primary w-100">
+                Create Order
+            </a>
+        </div>
+
+        <div class="col-md-3 col-sm-6">
+            <a asp-page="/Customers/Create" class="btn btn-outline-secondary w-100">
+                Add Customer
+            </a>
+        </div>
+
+        <div class="col-md-3 col-sm-6">
+            <a asp-page="/Products/Create" class="btn btn-outline-secondary w-100">
+                Add Product
+            </a>
+        </div>
+
+        <div class="col-md-3 col-sm-6">
+            <a asp-page="/Invoices/Index" class="btn btn-outline-secondary w-100">
+                Invoices
+            </a>
+        </div>
+    </div>
+</div>
+
+

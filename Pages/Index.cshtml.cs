@@ -28,25 +28,38 @@ public class IndexModel : PageModel
     // Adjust this threshold whenever you want
     private const int LowStockThreshold = 5;
 
-    public void OnGet()
+    public async Task OnGetAsync()
     {
-        var today = DateTime.UtcNow.Date;
+        var today = DateTime.Today;
+        var tomorrow = today.AddDays(1);
 
-        CustomerCount = _context.Customers.Count();
-        ProductCount = _context.Products.Count();
+        CustomerCount = await _context.Customers.AsNoTracking().CountAsync();
+        ProductCount = await _context.Products.AsNoTracking().CountAsync();
 
-        OrdersToday = _context.Orders.Count(o => o.OrderDate >= today);
-
-        LowStockCount = _context.Products.Count(p => p.StockQuantity <= LowStockThreshold);
-
-        // TotalSales based on invoices (better for ERP/accounting)
-        TotalSales = _context.Invoices.Any()
-            ? _context.Invoices.Sum(i => i.TotalAmount)
-            : 0m;
-
-        // Recent orders (last 5) with calculated total from items
-        RecentOrders = _context.Orders
+        OrdersToday = await _context.Orders
             .AsNoTracking()
+            .CountAsync(o => o.OrderDate >= today && o.OrderDate < tomorrow);
+
+        LowStockCount = await _context.Products
+            .AsNoTracking()
+            .CountAsync(p => p.StockQuantity <= LowStockThreshold);
+
+        var completeOrders = await _context.Orders
+            .AsNoTracking()
+            .Include(o => o.OrderItems)
+            .ToListAsync();
+
+        TotalSales = completeOrders
+            .SelectMany(o => o.OrderItems)
+            .Sum(oi => oi.Quantity * oi.UnitPriceAtTime);
+
+
+
+
+        RecentOrders = await _context.Orders
+            .AsNoTracking()
+            .Include(o => o.Customer)
+            .Include(o => o.OrderItems)
             .OrderByDescending(o => o.OrderDate)
             .Take(5)
             .Select(o => new RecentOrderRow
@@ -56,21 +69,21 @@ public class IndexModel : PageModel
                 Status = o.Status,
                 Total = o.OrderItems.Sum(oi => oi.Quantity * oi.UnitPriceAtTime)
             })
-            .ToList();
+            .ToListAsync();
 
-        // Low stock products (top 5)
-        LowStockProducts = _context.Products
+        LowStockProducts = await _context.Products
             .AsNoTracking()
             .Where(p => p.StockQuantity <= LowStockThreshold)
             .OrderBy(p => p.StockQuantity)
             .Take(5)
             .Select(p => new LowStockRow
             {
+                ProductID = p.ProductID,
                 SKU = p.SKU,
                 ProductName = p.ProductName,
                 StockQuantity = p.StockQuantity
             })
-            .ToList();
+            .ToListAsync();
     }
 
     public class RecentOrderRow
@@ -83,6 +96,7 @@ public class IndexModel : PageModel
 
     public class LowStockRow
     {
+        public int ProductID { get; set; }
         public string SKU { get; set; } = "";
         public string ProductName { get; set; } = "";
         public int StockQuantity { get; set; }
