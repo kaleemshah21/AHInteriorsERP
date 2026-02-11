@@ -29,6 +29,10 @@
             <th>
                 @Html.DisplayNameFor(model => model.Product[0].BasePrice)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Product[0].LocationCode)
+            </th>
+
             <th></th>
         </tr>
     </thead>
@@ -47,9 +51,13 @@
             <td>
                 @Html.DisplayFor(modelItem => item.StockQuantity)
             </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.BasePrice)
-                </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BasePrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LocationCode)
+            </td>
+
             <td class="actions">
                 <a asp-page="./Edit" asp-route-id="@item.ProductID">Edit</a> |
                 <a asp-page="./Details" asp-route-id="@item.ProductID">Details</a> |

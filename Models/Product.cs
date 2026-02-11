@@ -22,6 +22,7 @@ namespace AHInteriorsERP.Models
         [Range(0, double.MaxValue)]
         public decimal BasePrice { get; set; }
 
+        public string? LocationCode { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
