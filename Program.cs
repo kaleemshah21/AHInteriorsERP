@@ -1,18 +1,43 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using AH.Data;
 using AHInteriorsERP.Data;
+using AHInteriorsERP.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddRazorPages();
+builder.Services.AddRazorPages(options =>
+{
+    options.Conventions.AuthorizeFolder("/");
+    options.Conventions.AllowAnonymousToAreaFolder("Identity", "/Account");
+});
+
 builder.Services.AddDbContext<AHInteriorsERPContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("AHInteriorsERPContext") ?? throw new InvalidOperationException("Connection string 'AHInteriorsERPContext' not found.")));
 
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = false;
+})
+.AddEntityFrameworkStores<AHInteriorsERPContext>()
+.AddDefaultTokenProviders()
+.AddDefaultUI();
+
+
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    await IdentitySeeder.SeedAsync(services);
+}
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -41,6 +66,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapRazorPages();

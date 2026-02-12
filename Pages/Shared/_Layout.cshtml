@@ -70,14 +70,11 @@
                     <a class="nav-link text-white" asp-page="/Profile/Index">Profile</a>
                 </li>
 
-                <li class="nav-item">
-                    <form method="post" asp-page="/Account/Logout" class="m-0">
-                        <button type="submit"
-                                class="nav-link text-white btn btn-link p-0 text-start w-100">
-                            Logout
-                        </button>
-                    </form>
-                </li>
+                <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#logoutModal">
+                    Logout
+                </a>
+
+
             </ul>
 
 
@@ -101,6 +98,46 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
+
+
+    <div class="modal fade" id="logoutModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm Logout</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    Are you sure you want to log out, @User.Identity.Name?
+
+                </div>
+
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn-secondary"
+                            data-bs-dismiss="modal">
+                        Cancel
+                    </button>
+
+                    <form asp-area="Identity"
+                          asp-page="/Account/Logout"
+                          method="post"
+                          asp-route-returnUrl="/Identity/Account/Login">
+
+                        <button type="submit" class="btn btn-danger">
+                            Yes, Logout
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
 </body>
 
 </html>

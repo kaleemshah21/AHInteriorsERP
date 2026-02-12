@@ -53,6 +53,13 @@ h2, .h2 {
 aside.bg-dark {
     background: #0b1220 !important;
     border-right: 1px solid rgba(255,255,255,0.08);
+    width: 260px; /* same as your inline style */
+    min-width: 260px; /* prevents shrinking */
+    flex: 0 0 260px; /* don’t grow, don’t shrink */
+    position: sticky; /* stays visible when scrolling */
+    top: 0;
+    height: 100vh; /* full screen height */
+    overflow-y: auto; /* scroll sidebar if it gets long */
 }
 
     aside.bg-dark .nav-link {
@@ -250,3 +257,11 @@ textarea {
 }
 
 
+/* Login page polish */
+.card {
+    border-radius: 16px;
+}
+
+body {
+    background: #f8fafc;
+}

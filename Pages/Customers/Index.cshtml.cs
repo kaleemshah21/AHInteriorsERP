@@ -19,11 +19,12 @@ namespace AHInteriorsERP.Pages.Customers
             _context = context;
         }
 
-        public IList<Customer> Customer { get;set; } = default!;
+        public IList<Customer> Customer { get; set; } = new List<Customer>();
+
 
         public async Task OnGetAsync()
         {
-            Customer = await _context.Customers.ToListAsync();
+            Customer = await _context.Customers.AsNoTracking().ToListAsync();
         }
     }
 }
