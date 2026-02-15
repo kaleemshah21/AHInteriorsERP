@@ -11,7 +11,7 @@ namespace AHInteriorsERP.Data
             var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
 
             // Roles
-            string[] roles = { "Admin", "Staff" };
+            string[] roles = { "Admin", "Staff","Warehouse" };
             foreach (var role in roles)
                 if (!await roleManager.RoleExistsAsync(role))
                     await roleManager.CreateAsync(new IdentityRole(role));

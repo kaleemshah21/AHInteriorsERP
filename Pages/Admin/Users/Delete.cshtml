@@ -1,0 +1,11 @@
+﻿@page "{id}"
+@model AHInteriorsERP.Pages.Admin.Users.DeleteModel
+
+<h1>Delete User</h1>
+
+<p>Are you sure you want to delete @Model.User.Email?</p>
+
+<form method="post">
+    <button class="btn btn-danger">Delete</button>
+    <a asp-page="./Index">Cancel</a>
+</form>

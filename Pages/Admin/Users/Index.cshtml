@@ -1,0 +1,31 @@
+﻿@page
+@model AHInteriorsERP.Pages.Admin.Users.IndexModel
+
+<h1>Users</h1>
+
+<p>
+    <a asp-page="./Create" class="btn btn-primary">Add User</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>Username</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var u in Model.Users)
+        {
+            <tr>
+                <td>@u.Email</td>
+                <td>@u.UserName</td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@u.Id">Edit</a> |
+                    <a asp-page="./Delete" asp-route-id="@u.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

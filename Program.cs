@@ -12,7 +12,14 @@ builder.Services.AddRazorPages(options =>
 {
     options.Conventions.AuthorizeFolder("/");
     options.Conventions.AllowAnonymousToAreaFolder("Identity", "/Account");
+    options.Conventions.AuthorizeFolder("/Admin", "AdminOnly");
 });
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", p => p.RequireRole("Admin"));
+});
+
 
 builder.Services.AddDbContext<AHInteriorsERPContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("AHInteriorsERPContext") ?? throw new InvalidOperationException("Connection string 'AHInteriorsERPContext' not found.")));
