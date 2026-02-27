@@ -128,6 +128,8 @@ public class IndexModel : PageModel
             })
             .ToListAsync();
 
+        var grandTotal = rows.Sum(r => r.Total);
+
         QuestPDF.Settings.License = LicenseType.Community;
 
         var document = Document.Create(container =>
@@ -166,13 +168,16 @@ public class IndexModel : PageModel
                         table.Cell().Text(r.Status);
                         table.Cell().AlignRight().Text($"£{r.Total:0.00}");
                     }
+
+                    // TOTAL ROW
+                    table.Cell().ColumnSpan(4).AlignRight().Text("TOTAL").SemiBold();
+                    table.Cell().AlignRight().Text($"£{grandTotal:0.00}").SemiBold();
                 });
             });
         });
 
         return File(document.GeneratePdf(), "application/pdf", "OrdersReport.pdf");
     }
-
     public async Task<IActionResult> OnGetExportBestPdfAsync()
     {
         var (start, endExclusive) = GetRange();
@@ -304,6 +309,8 @@ public class IndexModel : PageModel
             })
             .ToListAsync();
 
+        var grandTotal = rows.Sum(r => r.Total);
+
         var sb = new StringBuilder();
         sb.AppendLine("OrderID,OrderDate,Customer,Status,Total");
 
@@ -313,7 +320,11 @@ public class IndexModel : PageModel
             sb.AppendLine($"{r.OrderID},{r.OrderDate:yyyy-MM-dd},{esc(r.CustomerName)},{esc(r.Status)},{r.Total:0.00}");
         }
 
-        return File(Encoding.UTF8.GetBytes(sb.ToString()),
+        // TOTAL ROW
+        sb.AppendLine($",,,TOTAL,{grandTotal:0.00}");
+
+        return File(
+            Encoding.UTF8.GetBytes(sb.ToString()),
             "text/csv",
             "OrdersReport.csv");
     }
