@@ -1,0 +1,169 @@
+﻿@page
+@model AHInteriorsERP.Pages.Reports.IndexModel
+@{
+    ViewData["Title"] = "Reports";
+}
+
+<h1>Reports</h1>
+
+<form method="get" class="row g-2 align-items-end mb-3">
+    <div class="col-sm-3">
+        <label class="form-label">From</label>
+        <input type="date" class="form-control" name="From"
+               value="@Model.From?.ToString("yyyy-MM-dd")" />
+    </div>
+
+    <div class="col-sm-3">
+        <label class="form-label">To</label>
+        <input type="date" class="form-control" name="To"
+               value="@Model.To?.ToString("yyyy-MM-dd")" />
+    </div>
+
+    <div class="col-sm-3">
+        <button class="btn btn-primary w-100" type="submit">
+            Run
+        </button>
+    </div>
+</form>
+
+<div class="row g-3 mb-3">
+    <div class="col-md-6">
+        <div class="card p-3">
+            <div class="text-muted">Orders</div>
+            <div class="h3 mb-0">@Model.OrdersCount</div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card p-3">
+            <div class="text-muted">Total sales</div>
+            <div class="h3 mb-0">£@Model.TotalSales.ToString("0.00")</div>
+        </div>
+    </div>
+</div>
+
+<div class="card p-3 mb-4">
+    <div class="d-flex justify-content-between mb-2">
+        <h5>Orders</h5>
+        <div>
+            <a class="btn btn-outline-secondary"
+               asp-page-handler="ExportOrders"
+               asp-route-From="@Model.From?.ToString("yyyy-MM-dd")"
+               asp-route-To="@Model.To?.ToString("yyyy-MM-dd")">
+                Export CSV
+            </a>
+            <a class="btn btn-outline-dark"
+               asp-page-handler="ExportOrdersPdf"
+               asp-route-From="@Model.From?.ToString("yyyy-MM-dd")"
+               asp-route-To="@Model.To?.ToString("yyyy-MM-dd")">
+                Export PDF
+            </a>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Order #</th>
+                    <th>Date</th>
+                    <th>Customer</th>
+                    <th>Status</th>
+                    <th class="text-end">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var o in Model.Orders)
+                {
+                    <tr>
+                        <td>@o.OrderID</td>
+                        <td>@o.OrderDate.ToString("yyyy-MM-dd")</td>
+                        <td>@o.CustomerName</td>
+                        <td>@o.Status</td>
+                        <td class="text-end">£@o.Total.ToString("0.00")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card p-3 mb-4">
+    <div class="d-flex justify-content-between mb-2">
+        <h5>Best Sellers</h5>
+        <div>
+            <a class="btn btn-outline-secondary"
+               asp-page-handler="ExportBest"
+               asp-route-From="@Model.From?.ToString("yyyy-MM-dd")"
+               asp-route-To="@Model.To?.ToString("yyyy-MM-dd")">
+                Export CSV
+            </a>
+            <a class="btn btn-outline-dark"
+               asp-page-handler="ExportBestPdf"
+               asp-route-From="@Model.From?.ToString("yyyy-MM-dd")"
+               asp-route-To="@Model.To?.ToString("yyyy-MM-dd")">
+                Export PDF
+            </a>
+        </div>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th class="text-end">Qty</th>
+                <th class="text-end">Revenue</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var p in Model.BestSellers)
+            {
+                <tr>
+                    <td>@p.ProductName</td>
+                    <td class="text-end">@p.QuantitySold</td>
+                    <td class="text-end">£@p.Revenue.ToString("0.00")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="card p-3">
+    <div class="d-flex justify-content-between mb-2">
+        <h5>Worst Sellers</h5>
+        <div>
+            <a class="btn btn-outline-secondary"
+               asp-page-handler="ExportWorst"
+               asp-route-From="@Model.From?.ToString("yyyy-MM-dd")"
+               asp-route-To="@Model.To?.ToString("yyyy-MM-dd")">
+                Export CSV
+            </a>
+            <a class="btn btn-outline-dark"
+               asp-page-handler="ExportWorstPdf"
+               asp-route-From="@Model.From?.ToString("yyyy-MM-dd")"
+               asp-route-To="@Model.To?.ToString("yyyy-MM-dd")">
+                Export PDF
+            </a>
+        </div>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th class="text-end">Qty</th>
+                <th class="text-end">Revenue</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var p in Model.WorstSellers)
+            {
+                <tr>
+                    <td>@p.ProductName</td>
+                    <td class="text-end">@p.QuantitySold</td>
+                    <td class="text-end">£@p.Revenue.ToString("0.00")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
