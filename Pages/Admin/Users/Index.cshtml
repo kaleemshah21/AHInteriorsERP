@@ -3,6 +3,13 @@
 
 <h1>Users</h1>
 
+@if (!string.IsNullOrEmpty(Model.StatusMessage))
+{
+    <div class="alert alert-success">
+        @Model.StatusMessage
+    </div>
+}
+
 <p>
     <a asp-page="./Create" class="btn btn-primary">Add User</a>
 </p>
@@ -10,8 +17,10 @@
 <table class="table">
     <thead>
         <tr>
-            <th>Email</th>
-            <th>Username</th>
+            <th>Email/Username</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Roles</th>
             <th></th>
         </tr>
     </thead>
@@ -20,10 +29,17 @@
         {
             <tr>
                 <td>@u.Email</td>
-                <td>@u.UserName</td>
+                <td>@u.FirstName</td>
+                <td>@u.LastName</td>
+                <td>@string.Join(", ", Model.UserRoles[u.Id])</td>
                 <td>
                     <a asp-page="./Edit" asp-route-id="@u.Id">Edit</a> |
-                    <a asp-page="./Delete" asp-route-id="@u.Id">Delete</a>
+                    <a asp-page="./Delete" asp-route-id="@u.Id">Delete</a> |
+                    <form method="post" asp-page-handler="Reset2FA" style="display:inline" 
+                          onsubmit="return confirm('Are you sure you want to reset 2FA for this user?');">
+                        <input type="hidden" name="userId" value="@u.Id" />
+                        <button type="submit" class="btn btn-warning btn-sm">Reset 2FA</button>
+                    </form>
                 </td>
             </tr>
         }

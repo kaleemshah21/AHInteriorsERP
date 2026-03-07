@@ -2,8 +2,10 @@ using AH.Data;
 using AHInteriorsERP.Data;
 using AHInteriorsERP.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using AHInteriorsERP.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,9 +22,11 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("AdminOnly", p => p.RequireRole("Admin"));
 });
 
-
+builder.Services.AddTransient<IEmailSender, EmailSender>();
 builder.Services.AddDbContext<AHInteriorsERPContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("AHInteriorsERPContext") ?? throw new InvalidOperationException("Connection string 'AHInteriorsERPContext' not found.")));
+
+
 
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();

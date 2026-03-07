@@ -1,4 +1,13 @@
-﻿
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+
 @{
-    Layout = "/Pages/Shared/_AuthLayout.cshtml";
+    if (SignInManager.IsSignedIn(User))
+    {
+        Layout = "/Pages/Shared/_Layout.cshtml"; // WITH sidebar
+    }
+    else
+    {
+        Layout = "/Pages/Shared/_AuthLayout.cshtml"; // NO sidebar
+    }
 }
