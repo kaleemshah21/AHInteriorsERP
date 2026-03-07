@@ -12,8 +12,8 @@ namespace AHInteriorsERP.Models
         public DateTime OrderDate { get; set; } = DateTime.UtcNow;
 
         [Required]
-        [StringLength(50)]
-        public string Status { get; set; } = "Pending";
+
+        public OrderStatus Status { get; set; } = OrderStatus.Pending;
 
         [StringLength(2000)]
         public string? Notes { get; set; }

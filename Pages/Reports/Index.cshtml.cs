@@ -99,7 +99,7 @@ public class IndexModel : PageModel
                 OrderID = o.OrderID,
                 OrderDate = o.OrderDate,
                 CustomerName = o.Customer != null ? o.Customer.CustomerName : "",
-                Status = o.Status,
+                Status = o.Status.ToString(),
                 Total = o.OrderItems.Sum(oi => oi.Quantity * oi.UnitPriceAtTime)
             })
             .ToListAsync();
@@ -123,7 +123,7 @@ public class IndexModel : PageModel
                 OrderID = o.OrderID,
                 OrderDate = o.OrderDate,
                 CustomerName = o.Customer != null ? o.Customer.CustomerName : "",
-                Status = o.Status,
+                Status = o.Status.ToString(),
                 Total = o.OrderItems.Sum(oi => oi.Quantity * oi.UnitPriceAtTime)
             })
             .ToListAsync();
@@ -304,7 +304,7 @@ public class IndexModel : PageModel
                 OrderID = o.OrderID,
                 OrderDate = o.OrderDate,
                 CustomerName = o.Customer != null ? o.Customer.CustomerName : "",
-                Status = o.Status,
+                Status = o.Status.ToString(),
                 Total = o.OrderItems.Sum(oi => oi.Quantity * oi.UnitPriceAtTime)
             })
             .ToListAsync();

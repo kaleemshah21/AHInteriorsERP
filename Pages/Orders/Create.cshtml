@@ -1,5 +1,8 @@
-﻿@page
+﻿
+
+@page
 @model AHInteriorsERP.Pages.Orders.CreateModel
+@using AHInteriorsERP.Models
 
 @{
     ViewData["Title"] = "Create";
@@ -21,10 +24,13 @@
             </div>
 
             <div class="form-group">
-                <span class="text-danger">*</span>
                 <label asp-for="Order.Status" class="control-label"></label>
-                <input asp-for="Order.Status" class="form-control" aria-required="true" />
-                <span asp-validation-for="Order.Status" class="text-danger"></span>
+
+               
+                <input type="text" class="form-control" value="Pending" readonly />
+
+           
+                <input type="hidden" asp-for="Order.Status" value="Pending" />
             </div>
 
             <div class="form-group">

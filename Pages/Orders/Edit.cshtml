@@ -1,6 +1,6 @@
 ﻿@page
 @model AHInteriorsERP.Pages.Orders.EditModel
-
+@using AHInteriorsERP.Models
 @{
     ViewData["Title"] = "Edit";
 }
@@ -25,10 +25,12 @@
                 <span asp-validation-for="Order.OrderDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-<span class="text-danger">*</span>
+                <span class="text-danger">*</span>
                 <label asp-for="Order.Status" class="control-label"></label>
-                <input asp-for="Order.Status" class="form-control" aria-required="true"/>
-                <span asp-validation-for="Order.Status" class="text-danger"></span>
+                <select asp-for="Order.Status"
+                        class="form-control"
+                        asp-items="Html.GetEnumSelectList<OrderStatus>()">
+                </select>
             </div>
             <div class="form-group">
                 <label asp-for="Order.Notes" class="control-label"></label>

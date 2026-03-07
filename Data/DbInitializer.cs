@@ -152,13 +152,13 @@ namespace AHInteriorsERP.Data
                 {
                     CustomerID = customers[0].CustomerID,
                     OrderDate = DateTime.UtcNow.AddDays(-3),
-                    Status = "Completed"
+                    Status = OrderStatus.Completed
                 },
                 new Order
                 {
                     CustomerID = customers[1].CustomerID,
                     OrderDate = DateTime.UtcNow.AddDays(-1),
-                    Status = "Pending"
+                    Status = OrderStatus.Pending
                 }
             };
 

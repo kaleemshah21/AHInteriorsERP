@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -13,9 +12,9 @@ namespace AHInteriorsERP.Pages.Orders
 {
     public class EditModel : PageModel
     {
-        private readonly AH.Data.AHInteriorsERPContext _context;
+        private readonly AHInteriorsERPContext _context;
 
-        public EditModel(AH.Data.AHInteriorsERPContext context)
+        public EditModel(AHInteriorsERPContext context)
         {
             _context = context;
         }
@@ -30,26 +29,68 @@ namespace AHInteriorsERP.Pages.Orders
                 return NotFound();
             }
 
-            var order =  await _context.Orders.FirstOrDefaultAsync(m => m.OrderID == id);
+            var order = await _context.Orders
+                .FirstOrDefaultAsync(m => m.OrderID == id);
+
             if (order == null)
             {
                 return NotFound();
             }
+
             Order = order;
-           ViewData["CustomerID"] = new SelectList(_context.Customers, "CustomerID", "CustomerName");
+            ViewData["CustomerID"] = new SelectList(_context.Customers, "CustomerID", "CustomerName");
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
+                ViewData["CustomerID"] = new SelectList(_context.Customers, "CustomerID", "CustomerName");
                 return Page();
             }
 
-            _context.Attach(Order).State = EntityState.Modified;
+            var existingOrder = await _context.Orders
+                .Include(o => o.OrderItems)
+                .FirstOrDefaultAsync(o => o.OrderID == Order.OrderID);
+
+            if (existingOrder == null)
+            {
+                return NotFound();
+            }
+
+            var previousStatus = existingOrder.Status;
+
+            // Update editable fields
+            existingOrder.CustomerID = Order.CustomerID;
+            existingOrder.OrderDate = Order.OrderDate;
+            existingOrder.Status = Order.Status;
+            existingOrder.Notes = Order.Notes;
+
+            // If status changed to Completed, create invoice if one does not already exist
+            if (existingOrder.Status == OrderStatus.Completed &&
+                previousStatus != OrderStatus.Completed)
+            {
+                var existingInvoice = await _context.Invoices
+                    .FirstOrDefaultAsync(i => i.OrderID == existingOrder.OrderID);
+
+                if (existingInvoice == null)
+                {
+                    var total = existingOrder.OrderItems.Sum(i => i.Quantity * i.UnitPriceAtTime);
+
+                    var invoice = new Invoice
+                    {
+                        OrderID = existingOrder.OrderID,
+                        InvoiceNumber = $"INV-{existingOrder.OrderID:00000}",
+                        InvoiceDate = DateTime.UtcNow,
+                        TotalAmount = total,
+                        PaymentStatus = "Unpaid",
+                        Notes = $"Auto-generated when order {existingOrder.OrderID} was marked as completed."
+                    };
+
+                    _context.Invoices.Add(invoice);
+                }
+            }
 
             try
             {

@@ -66,7 +66,7 @@ public class IndexModel : PageModel
             {
                 OrderID = o.OrderID,
                 CustomerName = o.Customer != null ? o.Customer.CustomerName : "",
-                Status = o.Status,
+                Status = o.Status.ToString(),
                 Total = o.OrderItems.Sum(oi => oi.Quantity * oi.UnitPriceAtTime)
             })
             .ToListAsync();
