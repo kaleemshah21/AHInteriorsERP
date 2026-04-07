@@ -1,0 +1,109 @@
+﻿@page
+@model AHInteriorsERP.Pages.Invoices.DetailsModel
+
+@{
+    ViewData["Title"] = "Invoice";
+}
+
+<div class="invoice-page">
+    <div class="invoice-toolbar no-print">
+        <a asp-page="./Index" class="btn btn-outline-secondary">Back</a>
+        <button type="button" class="btn btn-primary" onclick="window.print()">Print</button>
+    </div>
+
+    <div class="invoice-document">
+        <div class="invoice-top">
+            <div class="invoice-brand">
+                <h1>AH.</h1>
+            </div>
+
+            <div class="invoice-company">
+                <div>AH Interiors</div>
+                <div>133 - 137 Scotland Road</div>
+                <div>Nelson</div>
+                <div>Lancashire</div>
+                <div>BB9 7XR</div>
+                <div>Tel: 01282 940090</div>
+                <div>Email: sales@ahinteriors.co.uk</div>
+            </div>
+        </div>
+
+        <div class="invoice-meta-bar">
+            <div><strong>Invoice #</strong> @Model.Invoice.InvoiceNumber</div>
+            <div><strong>Order #</strong> @Model.Invoice.OrderID</div>
+            <div><strong>Date:</strong> @Model.Invoice.InvoiceDate.ToString("dd MMM yyyy")</div>
+        </div>
+
+        <div class="invoice-info-grid">
+            <div class="invoice-info-card">
+                <div class="invoice-info-title">Customer</div>
+                <div class="invoice-info-body">
+                    <div>@Model.Invoice.Order?.Customer?.CustomerName</div>
+                    <div>@Model.Invoice.Order?.Customer?.AddressLine1</div>
+                    <div>@Model.Invoice.Order?.Customer?.AddressLine2</div>
+                    <div>@Model.Invoice.Order?.Customer?.City</div>
+                    <div>@Model.Invoice.Order?.Customer?.Postcode</div>
+                    <div>@Model.Invoice.Order?.Customer?.Email</div>
+                    <div>@Model.Invoice.Order?.Customer?.Phone</div>
+                </div>
+            </div>
+
+            <div class="invoice-info-card">
+                <div class="invoice-info-title">Order Details</div>
+                <div class="invoice-info-body">
+                    <div><strong>Status:</strong> @Model.Invoice.Order?.Status</div>
+                    <div><strong>Order Date:</strong> @Model.Invoice.Order?.OrderDate.ToString("dd MMM yyyy")</div>
+                    
+                    
+                    <div><strong>Notes:</strong>Thank you for your shopping with us</div>
+                    
+                </div>
+            </div>
+        </div>
+
+        <table class="invoice-table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>SKU</th>
+                    <th class="text-end">Price</th>
+                    <th class="text-end">Qty</th>
+                    <th class="text-end">Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+    @foreach (var item in Model.Invoice.InvoiceItems)
+    {
+        <tr>
+            <td>@item.ProductName</td>
+            <td>@item.SKU</td>
+            <td class="text-end">£@item.UnitPrice.ToString("0.00")</td>
+            <td class="text-end">@item.Quantity</td>
+            <td class="text-end">£@item.LineTotal.ToString("0.00")</td>
+        </tr>
+    }
+</tbody>
+        </table>
+
+@{
+    var subtotal = Model.Invoice.InvoiceItems?.Sum(i => i.LineTotal) ?? 0m;
+    var tax = 0m;
+    var total = Model.Invoice.TotalAmount;
+}
+
+        <div class="invoice-totals">
+            <table>
+                <tr>
+                    <td>Subtotal:</td>
+                    <td>£@subtotal.ToString("0.00")</td>
+                </tr>
+                <tr>
+                    <td>Tax:</td>
+                    <td>£@tax.ToString("0.00")</td>
+                </tr>
+                <tr class="grand-total">
+                    <td>Grand Total:</td>
+                    <td>£@total.ToString("0.00")</td>
+                </tr>
+            </table>
+        </div>

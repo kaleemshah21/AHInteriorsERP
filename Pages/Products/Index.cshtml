@@ -2,69 +2,44 @@
 @model AHInteriorsERP.Pages.Products.IndexModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Products";
 }
 
-<h1>Index</h1>
+<h1>Products</h1>
 
 <p>
-    <a asp-page="Create">Create New</a>
+    <a asp-page="Create" class="btn btn-primary">Add Product</a>
 </p>
-<div class="table-responsive">
+
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Product[0].SKU)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Product[0].ProductName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Product[0].Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Product[0].StockQuantity)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Product[0].BasePrice)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Product[0].LocationCode)
-            </th>
-
-            <th></th>
+            <th>SKU</th>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>Reserved</th>
+            <th>Available</th>
+            <th>Location</th>
+            <th class="actions"></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Product) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.SKU)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StockQuantity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BasePrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LocationCode)
-            </td>
-
-            <td class="actions">
-                <a asp-page="./Edit" asp-route-id="@item.ProductID">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.ProductID">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.ProductID">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model.Products)
+        {
+            <tr>
+                <td>@item.SKU</td>
+                <td>@item.ProductName</td>
+                <td>£@item.BasePrice.ToString("0.00")</td>
+                <td>@item.StockQuantity</td>
+                <td>@item.ReservedQuantity</td>
+                <td>@item.AvailableQuantity</td>
+                <td>@item.LocationCode</td>
+                <td class="actions">
+                    <a asp-page="./Edit" asp-route-id="@item.ProductID">Edit</a>
+                    <a asp-page="./Details" asp-route-id="@item.ProductID">Details</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
-</div>

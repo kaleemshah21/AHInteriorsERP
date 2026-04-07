@@ -195,20 +195,20 @@ namespace AHInteriorsERP.Data
             context.SaveChanges();
 
             // ---------- Invoice ----------
-            var invoices = new Invoice[]
-            {
-                new Invoice
-                {
-                    OrderID = orders[0].OrderID,
-                    InvoiceNumber = "INV-1001",
-                    InvoiceDate = DateTime.UtcNow.AddDays(-2),
-                    TotalAmount = 1330.00m,
-                    PaymentStatus = "Paid"
-                }
-            };
+            //var invoices = new Invoice[]
+            //{
+            //    new Invoice
+            //    {
+            //        OrderID = orders[0].OrderID,
+            //        InvoiceNumber = "INV-1001",
+            //        InvoiceDate = DateTime.UtcNow.AddDays(-2),
+            //        TotalAmount = 1330.00m,
+            //        PaymentStatus = "Paid"
+            //    }
+            //};
 
-            context.Invoices.AddRange(invoices);
-            context.SaveChanges();
+            //context.Invoices.AddRange(invoices);
+            //context.SaveChanges();
         }
     }
 }

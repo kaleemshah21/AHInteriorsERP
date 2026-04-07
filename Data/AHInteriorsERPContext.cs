@@ -23,6 +23,7 @@ namespace AH.Data
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Invoice> Invoices { get; set; }
+        public DbSet<InvoiceItem> InvoiceItems { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -35,6 +36,24 @@ namespace AH.Data
             modelBuilder.Entity<Order>().ToTable("Order");
             modelBuilder.Entity<OrderItem>().ToTable("OrderItem");
             modelBuilder.Entity<Invoice>().ToTable("Invoice");
+            modelBuilder.Entity<InvoiceItem>().ToTable("InvoiceItem");
+
+            modelBuilder.Entity<InvoiceItem>()
+                .HasOne(ii => ii.Invoice)
+                .WithMany(i => i.InvoiceItems)
+                .HasForeignKey(ii => ii.InvoiceID);
+
+            modelBuilder.Entity<Invoice>()
+                .Property(i => i.TotalAmount)
+                .HasPrecision(18, 2);
+
+            modelBuilder.Entity<InvoiceItem>()
+                .Property(ii => ii.UnitPrice)
+                .HasPrecision(18, 2);
+
+            modelBuilder.Entity<InvoiceItem>()
+                .Property(ii => ii.LineTotal)
+                .HasPrecision(18, 2);
 
 
             // One customer can have many orders

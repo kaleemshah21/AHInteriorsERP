@@ -1,0 +1,58 @@
+﻿@page
+@model AHInteriorsERP.Pages.Invoices.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Invoice[0].InvoiceNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Invoice[0].InvoiceDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Invoice[0].TotalAmount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Invoice[0].Notes)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Invoice[0].Order)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Invoice) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.InvoiceNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InvoiceDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalAmount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Notes)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Order.OrderID)
+            </td>
+            <td>
+                
+                <a asp-page="./Details" asp-route-id="@item.InvoiceID">Details</a> |
+               
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

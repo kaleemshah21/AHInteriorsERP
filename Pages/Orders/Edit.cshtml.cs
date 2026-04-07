@@ -61,19 +61,68 @@ namespace AHInteriorsERP.Pages.Orders
 
             var previousStatus = existingOrder.Status;
 
+            // Block reversing a completed order
+            if (previousStatus == OrderStatus.Completed && Order.Status == OrderStatus.Pending)
+            {
+                ModelState.AddModelError(string.Empty, "A completed order cannot be changed back to pending.");
+                ViewData["CustomerID"] = new SelectList(_context.Customers, "CustomerID", "CustomerName");
+                return Page();
+            }
+
+            if (previousStatus == OrderStatus.Completed && Order.Status == OrderStatus.Cancelled)
+            {
+                ModelState.AddModelError(string.Empty, "A completed order cannot be cancelled once an invoice has been created.");
+                ViewData["CustomerID"] = new SelectList(_context.Customers, "CustomerID", "CustomerName");
+                return Page();
+            }
+
             // Update editable fields
             existingOrder.CustomerID = Order.CustomerID;
             existingOrder.OrderDate = Order.OrderDate;
             existingOrder.Status = Order.Status;
             existingOrder.Notes = Order.Notes;
 
-            // If status changed to Completed, create invoice if one does not already exist
+            // If status changed to Completed, deduct stock and create invoice snapshot if one does not already exist
             if (existingOrder.Status == OrderStatus.Completed &&
                 previousStatus != OrderStatus.Completed)
             {
                 var existingInvoice = await _context.Invoices
                     .FirstOrDefaultAsync(i => i.OrderID == existingOrder.OrderID);
 
+                // Load products
+                foreach (var orderItem in existingOrder.OrderItems)
+                {
+                    await _context.Entry(orderItem)
+                        .Reference(oi => oi.Product)
+                        .LoadAsync();
+                }
+
+                // Check stock first
+                foreach (var item in existingOrder.OrderItems)
+                {
+                    if (item.Product == null)
+                    {
+                        ModelState.AddModelError(string.Empty, "A product on this order could not be found.");
+                        ViewData["CustomerID"] = new SelectList(_context.Customers, "CustomerID", "CustomerName");
+                        return Page();
+                    }
+
+                    if (item.Product.StockQuantity < item.Quantity)
+                    {
+                        ModelState.AddModelError(string.Empty,
+                            $"Not enough stock for {item.Product.ProductName}. Current stock: {item.Product.StockQuantity}.");
+                        ViewData["CustomerID"] = new SelectList(_context.Customers, "CustomerID", "CustomerName");
+                        return Page();
+                    }
+                }
+
+                // Deduct stock
+                foreach (var item in existingOrder.OrderItems)
+                {
+                    item.Product!.StockQuantity -= item.Quantity;
+                }
+
+                // Create invoice snapshot if missing
                 if (existingInvoice == null)
                 {
                     var total = existingOrder.OrderItems.Sum(i => i.Quantity * i.UnitPriceAtTime);
@@ -84,11 +133,24 @@ namespace AHInteriorsERP.Pages.Orders
                         InvoiceNumber = $"INV-{existingOrder.OrderID:00000}",
                         InvoiceDate = DateTime.UtcNow,
                         TotalAmount = total,
-                        PaymentStatus = "Unpaid",
-                        Notes = $"Auto-generated when order {existingOrder.OrderID} was marked as completed."
+                        Notes = "Thank you for your shopping with us."
                     };
 
                     _context.Invoices.Add(invoice);
+                    await _context.SaveChangesAsync();
+
+                    foreach (var item in existingOrder.OrderItems)
+                    {
+                        _context.InvoiceItems.Add(new InvoiceItem
+                        {
+                            InvoiceID = invoice.InvoiceID,
+                            ProductName = item.Product?.ProductName ?? "Unknown Product",
+                            SKU = item.Product?.SKU,
+                            Quantity = item.Quantity,
+                            UnitPrice = item.UnitPriceAtTime,
+                            LineTotal = item.Quantity * item.UnitPriceAtTime
+                        });
+                    }
                 }
             }
 
