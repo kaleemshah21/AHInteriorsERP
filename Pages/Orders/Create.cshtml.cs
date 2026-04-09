@@ -24,6 +24,12 @@ namespace AHInteriorsERP.Pages.Orders
         [BindProperty]
         public List<OrderItemInput> Items { get; set; } = new();
 
+        [BindProperty]
+        public NewCustomerInput NewCustomer { get; set; } = new();
+
+        [BindProperty]
+        public bool CreateNewCustomer { get; set; }
+
         public class OrderItemInput
         {
             public int ProductID { get; set; }
@@ -41,13 +47,29 @@ namespace AHInteriorsERP.Pages.Orders
             public int AvailableQuantity { get; set; }
         }
 
+        public class NewCustomerInput
+        {
+            public string CustomerName { get; set; } = string.Empty;
+            public string? Phone { get; set; }
+            public string? Email { get; set; }
+            public string? AddressLine1 { get; set; }
+            public string? AddressLine2 { get; set; }
+            public string? City { get; set; }
+            public string? Postcode { get; set; }
+        }
+
         private async Task LoadPageDataAsync()
         {
-            ViewData["CustomerID"] = new SelectList(
-                await _context.Customers.OrderBy(c => c.CustomerName).ToListAsync(),
-                "CustomerID",
-                "CustomerName"
-            );
+            var customers = await _context.Customers
+                .OrderBy(c => c.CustomerName)
+                .Select(c => new
+                {
+                    c.CustomerID,
+                    Display = c.CustomerName + " (" + (c.Postcode ?? "No postcode") + ")"
+                })
+                .ToListAsync();
+
+            ViewData["CustomerID"] = new SelectList(customers, "CustomerID", "Display", Order.CustomerID);
 
             var reservedLookup = await _context.OrderItems
                 .AsNoTracking()
@@ -100,21 +122,40 @@ namespace AHInteriorsERP.Pages.Orders
         {
             await LoadPageDataAsync();
 
-            if (!ModelState.IsValid)
-                return Page();
+            if (CreateNewCustomer)
+            {
+                if (string.IsNullOrWhiteSpace(NewCustomer.CustomerName))
+                {
+                    ModelState.AddModelError("NewCustomer.CustomerName", "Customer name is required.");
+                }
+
+                if (!string.IsNullOrWhiteSpace(NewCustomer.Email) &&
+                    !new System.ComponentModel.DataAnnotations.EmailAddressAttribute().IsValid(NewCustomer.Email))
+                {
+                    ModelState.AddModelError("NewCustomer.Email", "Please enter a valid email address.");
+                }
+
+                if (!string.IsNullOrWhiteSpace(NewCustomer.Phone) &&
+                    !new System.ComponentModel.DataAnnotations.PhoneAttribute().IsValid(NewCustomer.Phone))
+                {
+                    ModelState.AddModelError("NewCustomer.Phone", "Please enter a valid phone number.");
+                }
+            }
+            else
+            {
+                if (Order.CustomerID <= 0)
+                {
+                    ModelState.AddModelError("Order.CustomerID", "Please select a customer.");
+                }
+            }
 
             var selected = Items.Where(i => i.Quantity > 0).ToList();
 
             if (selected.Count == 0)
             {
                 ModelState.AddModelError(string.Empty, "Please enter a quantity for at least one product.");
-                return Page();
             }
 
-            // Force new orders to Pending
-            Order.Status = OrderStatus.Pending;
-
-            // Check available stock
             foreach (var line in selected)
             {
                 var product = Products.FirstOrDefault(p => p.ProductID == line.ProductID);
@@ -122,15 +163,50 @@ namespace AHInteriorsERP.Pages.Orders
                 if (product == null)
                 {
                     ModelState.AddModelError(string.Empty, "One of the selected products could not be found.");
-                    return Page();
+                    break;
                 }
 
                 if (line.Quantity > product.AvailableQuantity)
                 {
                     ModelState.AddModelError(string.Empty,
                         $"Not enough available stock for {product.ProductName}. Available: {product.AvailableQuantity}.");
-                    return Page();
                 }
+
+                if (line.Quantity < 0)
+                {
+                    ModelState.AddModelError(string.Empty,
+                        $"Quantity cannot be negative for {product.ProductName}.");
+                }
+            }
+
+            if (!ModelState.IsValid)
+                return Page();
+
+            if (CreateNewCustomer)
+            {
+                var customer = new Customer
+                {
+                    CustomerName = NewCustomer.CustomerName.Trim(),
+                    Phone = string.IsNullOrWhiteSpace(NewCustomer.Phone) ? null : NewCustomer.Phone.Trim(),
+                    Email = string.IsNullOrWhiteSpace(NewCustomer.Email) ? null : NewCustomer.Email.Trim(),
+                    AddressLine1 = string.IsNullOrWhiteSpace(NewCustomer.AddressLine1) ? null : NewCustomer.AddressLine1.Trim(),
+                    AddressLine2 = string.IsNullOrWhiteSpace(NewCustomer.AddressLine2) ? null : NewCustomer.AddressLine2.Trim(),
+                    City = string.IsNullOrWhiteSpace(NewCustomer.City) ? null : NewCustomer.City.Trim(),
+                    Postcode = string.IsNullOrWhiteSpace(NewCustomer.Postcode) ? null : NewCustomer.Postcode.Trim(),
+                    CreatedAt = DateTime.UtcNow
+                };
+
+                _context.Customers.Add(customer);
+                await _context.SaveChangesAsync();
+
+                Order.CustomerID = customer.CustomerID;
+            }
+
+            Order.Status = OrderStatus.Pending;
+
+            if (Order.OrderDate == default)
+            {
+                Order.OrderDate = DateTime.UtcNow;
             }
 
             _context.Orders.Add(Order);
