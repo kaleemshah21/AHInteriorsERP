@@ -15,6 +15,7 @@
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
     <div class="row">
+        <!-- LEFT SIDE -->
         <div class="col-md-4">
             <div class="form-group">
                 <label class="control-label">Customer</label>
@@ -31,62 +32,67 @@
                 </label>
             </div>
 
+            <!-- NEW CUSTOMER -->
             <div id="newCustomerSection">
                 <h5>New Customer</h5>
 
                 <div class="form-group mb-2">
-                    <label asp-for="NewCustomer.CustomerName" class="control-label"></label>
+                    <label asp-for="NewCustomer.CustomerName"></label>
+                    <span class="text-danger">*</span>
                     <input asp-for="NewCustomer.CustomerName" class="form-control" />
                     <span asp-validation-for="NewCustomer.CustomerName" class="text-danger"></span>
                 </div>
 
                 <div class="form-group mb-2">
-                    <label asp-for="NewCustomer.Phone" class="control-label"></label>
-                    <input asp-for="NewCustomer.Phone" class="form-control" />
+                    <label asp-for="NewCustomer.Phone"></label>
+                    <span class="text-danger">*</span>
+                    <input asp-for="NewCustomer.Phone" class="form-control" type="tel" />
                     <span asp-validation-for="NewCustomer.Phone" class="text-danger"></span>
                 </div>
 
                 <div class="form-group mb-2">
-                    <label asp-for="NewCustomer.Email" class="control-label"></label>
-                    <input asp-for="NewCustomer.Email" class="form-control" />
+                    <label asp-for="NewCustomer.Email"></label>
+                    <input asp-for="NewCustomer.Email" class="form-control" type="email" />
                     <span asp-validation-for="NewCustomer.Email" class="text-danger"></span>
                 </div>
 
                 <div class="form-group mb-2">
-                    <label asp-for="NewCustomer.AddressLine1" class="control-label"></label>
+                    <label asp-for="NewCustomer.AddressLine1"></label>
+                    <span class="text-danger">*</span>
                     <input asp-for="NewCustomer.AddressLine1" class="form-control" />
                     <span asp-validation-for="NewCustomer.AddressLine1" class="text-danger"></span>
                 </div>
 
                 <div class="form-group mb-2">
-                    <label asp-for="NewCustomer.AddressLine2" class="control-label"></label>
+                    <label asp-for="NewCustomer.AddressLine2"></label>
                     <input asp-for="NewCustomer.AddressLine2" class="form-control" />
                     <span asp-validation-for="NewCustomer.AddressLine2" class="text-danger"></span>
                 </div>
 
                 <div class="form-group mb-2">
-                    <label asp-for="NewCustomer.City" class="control-label"></label>
+                    <label asp-for="NewCustomer.City"></label>
+                    <span class="text-danger">*</span>
                     <input asp-for="NewCustomer.City" class="form-control" />
                     <span asp-validation-for="NewCustomer.City" class="text-danger"></span>
                 </div>
 
                 <div class="form-group mb-2">
-                    <label asp-for="NewCustomer.Postcode" class="control-label"></label>
+                    <label asp-for="NewCustomer.Postcode"></label>
+                    <span class="text-danger">*</span>
                     <input asp-for="NewCustomer.Postcode" class="form-control" />
                     <span asp-validation-for="NewCustomer.Postcode" class="text-danger"></span>
                 </div>
             </div>
 
-            <input type="hidden" asp-for="Order.Status" />
-            <input type="hidden" asp-for="Order.OrderDate" />
-
+            <!-- NOTES -->
             <div class="form-group mt-3">
-                <label asp-for="Order.Notes" class="control-label"></label>
+                <label asp-for="Order.Notes"></label>
                 <input asp-for="Order.Notes" class="form-control" />
                 <span asp-validation-for="Order.Notes" class="text-danger"></span>
             </div>
         </div>
 
+        <!-- RIGHT SIDE (PRODUCTS) -->
         <div class="col-md-8">
             <h5 class="mb-2">Products</h5>
             <p class="text-muted">Enter quantities for one or more products.</p>
