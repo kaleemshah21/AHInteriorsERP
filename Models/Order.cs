@@ -18,9 +18,29 @@ namespace AHInteriorsERP.Models
         [StringLength(2000)]
         public string? Notes { get; set; }
 
+        [Range(0, double.MaxValue)]
+        public decimal DiscountAmount { get; set; } = 0m;
+
         // Navigation
         public Customer? Customer { get; set; }
         public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
         public Invoice? Invoice { get; set; }
+
+        public decimal Subtotal
+        {
+            get
+            {
+                return OrderItems?.Sum(oi => oi.Quantity * oi.UnitPriceAtTime) ?? 0m;
+            }
+        }
+
+        public decimal Total
+        {
+            get
+            {
+                var total = Subtotal - DiscountAmount;
+                return total < 0 ? 0 : total;
+            }
+        }
     }
 }

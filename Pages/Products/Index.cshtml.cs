@@ -1,14 +1,16 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using AH.Data;
+using AHInteriorsERP.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using AH.Data;
-using AHInteriorsERP.Models;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace AHInteriorsERP.Pages.Products
 {
+    [Authorize(Roles = "Admin,Staff,Warehouse")]
     public class IndexModel : PageModel
     {
         private readonly AHInteriorsERPContext _context;
@@ -42,7 +44,7 @@ namespace AHInteriorsERP.Pages.Products
             public int ReservedQuantity { get; set; }
             public int AvailableQuantity { get; set; }
             public string? LocationCode { get; set; }
-            public bool IsActive { get; set; }
+            public bool isActive { get; set; }
         }
 
         public async Task OnGetAsync(string? sortOrder, string? currentFilter, string? searchString, int? pageIndex)
@@ -104,7 +106,8 @@ namespace AHInteriorsERP.Pages.Products
                 StockQuantity = p.StockQuantity,
                 ReservedQuantity = reservedLookup.ContainsKey(p.ProductID) ? reservedLookup[p.ProductID] : 0,
                 AvailableQuantity = p.StockQuantity - (reservedLookup.ContainsKey(p.ProductID) ? reservedLookup[p.ProductID] : 0),
-                LocationCode = p.LocationCode
+                LocationCode = p.LocationCode,
+                isActive = p.isActive
             });
 
             Products = await PaginatedList<ProductRow>.CreateAsync(projectedIQ, pageIndex ?? 1, 10);

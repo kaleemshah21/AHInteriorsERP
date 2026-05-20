@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace AHInteriorsERP.Pages.Customers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,Staff")]
     public class DeleteModel : PageModel
     {
         private readonly AH.Data.AHInteriorsERPContext _context;

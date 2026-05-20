@@ -1,5 +1,6 @@
 ﻿using AH.Data;
 using AHInteriorsERP.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -8,6 +9,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AHInteriorsERP.Pages.Orders
 {
+    [Authorize(Roles = "Admin,Staff,Warehouse")]
     public class CreateModel : PageModel
     {
         private readonly AHInteriorsERPContext _context;
@@ -97,8 +99,9 @@ namespace AHInteriorsERP.Pages.Orders
                 .ToDictionaryAsync(x => x.ProductID, x => x.Reserved);
 
             var productEntities = await _context.Products
-                .OrderBy(p => p.ProductName)
-                .ToListAsync();
+            .Where(p => p.isActive)
+            .OrderBy(p => p.ProductName)
+            .ToListAsync();
 
             Products = productEntities.Select(p =>
             {
@@ -217,6 +220,25 @@ namespace AHInteriorsERP.Pages.Orders
             var productLookup = await _context.Products
                 .Where(p => productIds.Contains(p.ProductID))
                 .ToDictionaryAsync(p => p.ProductID);
+
+            var subtotal = selected.Sum(i =>
+            {
+                var product = productLookup[i.ProductID];
+                return i.Quantity * product.BasePrice;
+            });
+
+            if (Order.DiscountAmount > subtotal)
+            {
+                ModelState.AddModelError("Order.DiscountAmount", "Discount cannot be greater than the order subtotal.");
+                await LoadPageDataAsync();
+                return Page();
+            }
+            if (Order.DiscountAmount < 0)
+            {
+                ModelState.AddModelError("Order.DiscountAmount", "Discount cannot be negative.");
+                await LoadPageDataAsync();
+                return Page();
+            }
 
             foreach (var line in selected)
             {

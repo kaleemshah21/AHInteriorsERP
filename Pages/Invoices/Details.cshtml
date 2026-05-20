@@ -86,9 +86,12 @@
         </table>
 
 @{
-    var subtotal = Model.Invoice.InvoiceItems?.Sum(i => i.LineTotal) ?? 0m;
-    var tax = 0m;
     var total = Model.Invoice.TotalAmount;
+
+    var subtotal = total / 1.20m;
+    var tax = total - subtotal;
+
+    var discount = Model.Invoice.DiscountAmount;
 }
 
         <div class="invoice-totals">
@@ -98,7 +101,11 @@
                     <td>£@subtotal.ToString("0.00")</td>
                 </tr>
                 <tr>
-                    <td>Tax:</td>
+                    <td>Discount:</td>
+                    <td>-£@discount.ToString("0.00")</td>
+                </tr>
+                <tr>
+                    <td>VAT(20%):</td>
                     <td>£@tax.ToString("0.00")</td>
                 </tr>
                 <tr class="grand-total">

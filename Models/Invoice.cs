@@ -19,6 +19,8 @@ namespace AHInteriorsERP.Models
 
         [StringLength(2000)]
         public string? Notes { get; set; }
+        [Range(0, double.MaxValue)]
+        public decimal DiscountAmount { get; set; } = 0m;
 
         public Order? Order { get; set; }
         public ICollection<InvoiceItem> InvoiceItems { get; set; } = new List<InvoiceItem>();

@@ -88,9 +88,7 @@
                             <td>@o.OrderID</td>
                             <td>@o.OrderDate</td>
                             <td>@o.Status</td>
-                            <td class="text-end">
-                                £@(o.OrderItems?.Sum(oi => oi.Quantity * oi.UnitPriceAtTime).ToString("0.00") ?? "0.00")
-                            </td>
+                            <td class="text-end">£@o.Total.ToString("0.00")</td>
                             <td class="actions">
                                 <a asp-page="/Orders/Details" asp-route-id="@o.OrderID">View</a>
                             </td>

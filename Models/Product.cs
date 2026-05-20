@@ -24,6 +24,8 @@ namespace AHInteriorsERP.Models
 
         public string? LocationCode { get; set; }
 
+        public bool isActive { get; set; } = true;
+
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         // Navigation: one Product can appear in many OrderItems

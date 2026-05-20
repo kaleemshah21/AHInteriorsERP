@@ -38,6 +38,14 @@ namespace AH.Data
             modelBuilder.Entity<Invoice>().ToTable("Invoice");
             modelBuilder.Entity<InvoiceItem>().ToTable("InvoiceItem");
 
+            modelBuilder.Entity<Order>()
+                .Property(o => o.DiscountAmount)
+                .HasPrecision(18, 2);
+
+            modelBuilder.Entity<Invoice>()
+                .Property(i => i.DiscountAmount)
+                .HasPrecision(18, 2);
+
             modelBuilder.Entity<InvoiceItem>()
                 .HasOne(ii => ii.Invoice)
                 .WithMany(i => i.InvoiceItems)

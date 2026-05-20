@@ -77,7 +77,9 @@
 </div>
 
 <div class="text-end mt-2">
-    <strong>Order Total:</strong> £@Model.OrderTotal.ToString("0.00")
+    <p><strong>Subtotal:</strong> £@Model.Order.Subtotal.ToString("0.00")</p>
+    <p><strong>Discount:</strong> -£@Model.Order.DiscountAmount.ToString("0.00")</p>
+    <h4><strong>Total:</strong> £@Model.Order.Total.ToString("0.00")</h4>
 </div>
 
 <div>

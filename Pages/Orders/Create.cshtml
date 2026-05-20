@@ -90,7 +90,13 @@
                 <input asp-for="Order.Notes" class="form-control" />
                 <span asp-validation-for="Order.Notes" class="text-danger"></span>
             </div>
+            <div class="form-group mt-3">
+                <label asp-for="Order.DiscountAmount" class="control-label">Discount (£)</label>
+                <input asp-for="Order.DiscountAmount" class="form-control" />
+                <span asp-validation-for="Order.DiscountAmount" class="text-danger"></span>
+            </div>
         </div>
+
 
         <!-- RIGHT SIDE (PRODUCTS) -->
         <div class="col-md-8">

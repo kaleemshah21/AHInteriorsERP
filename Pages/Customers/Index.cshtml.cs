@@ -1,14 +1,16 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using AH.Data;
+using AHInteriorsERP.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using AH.Data;
-using AHInteriorsERP.Models;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace AHInteriorsERP.Pages.Customers
 {
+    [Authorize(Roles = "Admin,Staff")]
     public class IndexModel : PageModel
     {
         private readonly AHInteriorsERPContext _context;

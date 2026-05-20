@@ -1,12 +1,14 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using AH.Data;
+using AHInteriorsERP.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using AH.Data;
-using AHInteriorsERP.Models;
+using System;
+using System.Threading.Tasks;
 
 namespace AHInteriorsERP.Pages.Customers
 {
+    [Authorize(Roles = "Admin,Staff")]
     public class CreateModel : PageModel
     {
         private readonly AHInteriorsERPContext _context;

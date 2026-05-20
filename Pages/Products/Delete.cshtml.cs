@@ -1,15 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using AH.Data;
+using AHInteriorsERP.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using AH.Data;
-using AHInteriorsERP.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace AHInteriorsERP.Pages.Products
 {
+    [Authorize(Roles = "Admin,Staff,Warehouse")]
     public class DeleteModel : PageModel
     {
         private readonly AH.Data.AHInteriorsERPContext _context;
@@ -53,7 +55,8 @@ namespace AHInteriorsERP.Pages.Products
             if (product != null)
             {
                 Product = product;
-                _context.Products.Remove(Product);
+                //rather than deleting the product, it sets it as inactive so that any orders with the disabled products are still correct
+                product.isActive = false;
                 await _context.SaveChangesAsync();
             }
 

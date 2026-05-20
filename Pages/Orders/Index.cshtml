@@ -22,6 +22,7 @@
     <table class="table table-striped table-hover">
         <thead>
             <tr>
+                <th>Order ID</th>
                 <th>
                     <a asp-page="./Index"
                        asp-route-sortOrder="@Model.DateSort"
@@ -54,14 +55,13 @@
                 foreach (var item in Model.Order)
                 {
                     <tr>
+                        <td>@item.OrderID</td>
                         <td>@item.OrderDate.ToString("dd/MM/yyyy")</td>
                         <td>@item.Status</td>
-                        <td>
-                            £@(item.OrderItems.Sum(oi => oi.Quantity * oi.UnitPriceAtTime).ToString("0.00"))
-                        </td>
+                        <td class="text-end">£@item.Total.ToString("0.00")</td>
                         <td>@item.Notes</td>
                         <td>@item.Customer?.CustomerName</td>
-                        <td class="actions">
+                        <td class=" actions">
                             <a asp-page="./Edit" asp-route-id="@item.OrderID">Edit</a> |
                             <a asp-page="./Details" asp-route-id="@item.OrderID">Details</a> |
                             <a asp-page="./Delete" asp-route-id="@item.OrderID">Delete</a>

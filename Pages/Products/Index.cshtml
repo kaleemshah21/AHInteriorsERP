@@ -47,6 +47,7 @@
                 <th>Reserved</th>
                 <th>Available</th>
                 <th>Location</th>
+                <th>Status</th>
                 <th class="actions"></th>
             </tr>
         </thead>
@@ -63,6 +64,16 @@
                         <td>@item.ReservedQuantity</td>
                         <td>@item.AvailableQuantity</td>
                         <td>@item.LocationCode</td>
+                        <td>
+                            @if (item.isActive)
+                            {
+                                <span class="badge bg-success">Active</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">Disabled</span>
+                            }
+                        </td>
                         <td class="actions">
                             <a asp-page="./Edit" asp-route-id="@item.ProductID">Edit</a> |
                             <a asp-page="./Details" asp-route-id="@item.ProductID">Details</a>

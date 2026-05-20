@@ -1,53 +1,133 @@
 ﻿@page
 @model AHInteriorsERP.Pages.Orders.EditModel
 @using AHInteriorsERP.Models
+
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Order";
+    var canEditItems = Model.Order.Status == OrderStatus.Pending;
 }
 
-<h1>Edit</h1>
-
-<h4>Order</h4>
+<h1>Edit Order</h1>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Order.OrderID" />
+
+<form method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <input type="hidden" asp-for="Order.OrderID" />
+
+    <div class="row">
+        <div class="col-md-4">
             <div class="form-group">
                 <label asp-for="Order.CustomerID" class="control-label"></label>
-                <select asp-for="Order.CustomerID" class="form-control" asp-items="ViewBag.CustomerID" ></select>
+                <select asp-for="Order.CustomerID" class="form-control" asp-items="ViewBag.CustomerID"></select>
                 <span asp-validation-for="Order.CustomerID" class="text-danger"></span>
             </div>
-            <div class="form-group">
+
+            <div class="form-group mt-3">
                 <label asp-for="Order.OrderDate" class="control-label"></label>
                 <input asp-for="Order.OrderDate" class="form-control" />
                 <span asp-validation-for="Order.OrderDate" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <span class="text-danger">*</span>
+
+            <div class="form-group mt-3">
                 <label asp-for="Order.Status" class="control-label"></label>
                 <select asp-for="Order.Status"
                         class="form-control"
                         asp-items="Html.GetEnumSelectList<OrderStatus>()">
                 </select>
+                <span asp-validation-for="Order.Status" class="text-danger"></span>
             </div>
-            <div class="form-group">
+
+            <div class="form-group mt-3">
                 <label asp-for="Order.Notes" class="control-label"></label>
                 <input asp-for="Order.Notes" class="form-control" />
                 <span asp-validation-for="Order.Notes" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
 
-<div>
-    <a asp-page="./Index">Back to List</a>
-</div>
+            <div class="form-group mt-3">
+                <label asp-for="Order.DiscountAmount" class="control-label">Discount (£)</label>
+
+                @if (canEditItems)
+                {
+                    <input asp-for="Order.DiscountAmount" class="form-control" />
+                }
+                else
+                {
+                    <input asp-for="Order.DiscountAmount" class="form-control" disabled />
+                    <input type="hidden" asp-for="Order.DiscountAmount" />
+                }
+
+                <span asp-validation-for="Order.DiscountAmount" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mt-3">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <a asp-page="./Index" class="btn btn-outline-secondary">Back to List</a>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <h5 class="mb-2">Order Items</h5>
+
+            @if (!canEditItems)
+            {
+                <div class="alert alert-warning">
+                    Products and quantities can only be edited while the order is pending.
+                </div>
+            }
+
+            <div class="products-scroll">
+                <div class="table-responsive">
+                    <table class="table mb-0">
+                        <thead>
+                            <tr>
+                                <th>SKU</th>
+                                <th>Product</th>
+                                <th class="text-end">Price</th>
+                                <th class="text-end">Stock</th>
+                                <th class="text-end">Reserved</th>
+                                <th class="text-end">Available</th>
+                                <th class="text-end" style="width:160px;">Qty</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.Products.Count; i++)
+                            {
+                                <tr>
+                                    <td>
+                                        @Model.Products[i].SKU
+                                        <input type="hidden" asp-for="Items[i].ProductID" value="@Model.Products[i].ProductID" />
+                                    </td>
+                                    <td>@Model.Products[i].ProductName</td>
+                                    <td class="text-end">£@Model.Products[i].BasePrice.ToString("0.00")</td>
+                                    <td class="text-end">@Model.Products[i].StockQuantity</td>
+                                    <td class="text-end">@Model.Products[i].ReservedQuantity</td>
+                                    <td class="text-end">@Model.Products[i].AvailableQuantity</td>
+                                    <td class="text-end">
+                                        @if (canEditItems)
+                                        {
+                                            <input asp-for="Items[i].Quantity" class="form-control text-end" />
+                                        }
+                                        else
+                                        {
+                                            <input asp-for="Items[i].Quantity" class="form-control text-end" disabled />
+                                            <input type="hidden" asp-for="Items[i].Quantity" />
+                                        }
+
+                                        <span asp-validation-for="Items[i].Quantity" class="text-danger"></span>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

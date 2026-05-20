@@ -4,7 +4,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using AH.Data;
-
+using AHInteriorsERP.Models;
 public class IndexModel : PageModel
 {
     private readonly AHInteriorsERPContext _context;
@@ -33,28 +33,37 @@ public class IndexModel : PageModel
         var today = DateTime.Today;
         var tomorrow = today.AddDays(1);
 
-        CustomerCount = await _context.Customers.AsNoTracking().CountAsync();
-        ProductCount = await _context.Products.AsNoTracking().CountAsync();
+        CustomerCount = await _context.Customers
+            .AsNoTracking()
+            .CountAsync();
+
+        ProductCount = await _context.Products
+            .AsNoTracking()
+            .CountAsync(p => p.isActive);
 
         OrdersToday = await _context.Orders
             .AsNoTracking()
-            .CountAsync(o => o.OrderDate >= today && o.OrderDate < tomorrow);
+            .CountAsync(o =>
+                o.OrderDate >= today &&
+                o.OrderDate < tomorrow &&
+                o.Status != OrderStatus.Cancelled);
 
         LowStockCount = await _context.Products
             .AsNoTracking()
-            .CountAsync(p => p.StockQuantity <= LowStockThreshold);
+            .CountAsync(p =>
+                p.isActive &&
+                p.StockQuantity <= LowStockThreshold);
 
-        var completeOrders = await _context.Orders
+        var completedOrders = await _context.Orders
             .AsNoTracking()
             .Include(o => o.OrderItems)
+            .Where(o => o.Status == OrderStatus.Completed)
             .ToListAsync();
 
-        TotalSales = completeOrders
-            .SelectMany(o => o.OrderItems)
-            .Sum(oi => oi.Quantity * oi.UnitPriceAtTime);
-
-
-
+        TotalSales = completedOrders
+            .Sum(o =>
+                o.OrderItems.Sum(oi => oi.Quantity * oi.UnitPriceAtTime)
+                - o.DiscountAmount);
 
         RecentOrders = await _context.Orders
             .AsNoTracking()
@@ -67,13 +76,15 @@ public class IndexModel : PageModel
                 OrderID = o.OrderID,
                 CustomerName = o.Customer != null ? o.Customer.CustomerName : "",
                 Status = o.Status.ToString(),
-                Total = o.OrderItems.Sum(oi => oi.Quantity * oi.UnitPriceAtTime)
+                Total = o.OrderItems.Sum(oi => oi.Quantity * oi.UnitPriceAtTime) - o.DiscountAmount
             })
             .ToListAsync();
 
         LowStockProducts = await _context.Products
             .AsNoTracking()
-            .Where(p => p.StockQuantity <= LowStockThreshold)
+            .Where(p =>
+                p.isActive &&
+                p.StockQuantity <= LowStockThreshold)
             .OrderBy(p => p.StockQuantity)
             .Take(5)
             .Select(p => new LowStockRow

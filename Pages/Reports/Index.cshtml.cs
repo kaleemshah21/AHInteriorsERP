@@ -1,13 +1,14 @@
-using System.Text;
 using AH.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
+using System.Text;
 namespace AHInteriorsERP.Pages.Reports;
-
+[Authorize(Roles = "Admin")]
 public class IndexModel : PageModel
 {
     private readonly AHInteriorsERPContext _context;
