@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
-
+// This model stores the products selected in an order,
+// including quantity and the product price at the time of ordering.
 namespace AHInteriorsERP.Models
 {
     public class OrderItem

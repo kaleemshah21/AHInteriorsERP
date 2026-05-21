@@ -8,7 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+// This file loads the selected product record from the database
+// so its full details can be displayed.
 namespace AHInteriorsERP.Pages.Products
 {
     [Authorize(Roles = "Admin,Staff,Warehouse")]

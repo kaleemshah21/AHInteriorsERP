@@ -7,6 +7,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using AHInteriorsERP.Services;
 
+// This file configures the main application services, database connection,
+// authentication, role-based access, seed data and request pipeline.
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.

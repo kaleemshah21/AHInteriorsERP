@@ -5,6 +5,10 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using AH.Data;
 using AHInteriorsERP.Models;
+
+
+// This file loads dashboard statistics including orders,
+// sales totals, customer counts, product counts and low stock items.
 public class IndexModel : PageModel
 {
     private readonly AHInteriorsERPContext _context;

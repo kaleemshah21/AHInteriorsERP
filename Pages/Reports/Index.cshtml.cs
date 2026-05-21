@@ -9,6 +9,9 @@ using QuestPDF.Infrastructure;
 using System.Text;
 namespace AHInteriorsERP.Pages.Reports;
 [Authorize(Roles = "Admin")]
+
+// This file generates sales and order reports,
+// calculates totals and handles CSV and PDF exports.
 public class IndexModel : PageModel
 {
     private readonly AHInteriorsERPContext _context;

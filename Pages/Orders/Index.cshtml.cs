@@ -8,6 +8,9 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
+// This file loads the order list and handles searching,
+// sorting and pagination for order records.
+
 namespace AHInteriorsERP.Pages.Orders
 {
     [Authorize(Roles = "Admin,Staff,Warehouse")]

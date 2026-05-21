@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
 
 namespace AHInteriorsERP.Pages.Admin.Users;
+// This page model handles the creation of new user accounts
+// and assigns the selected role using ASP.NET Core Identity.
 
 [Authorize(Roles = "Admin")]
 public class CreateModel : PageModel

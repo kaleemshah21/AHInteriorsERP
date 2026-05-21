@@ -8,7 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-
+// This file handles editing orders, updating order items,
+// validating stock levels and generating invoices when orders are completed.
 namespace AHInteriorsERP.Pages.Orders
 {
     [Authorize(Roles = "Admin,Staff,Warehouse")]

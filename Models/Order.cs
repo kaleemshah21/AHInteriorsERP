@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
-
+// This model stores customer orders, including status, discount,
+// related order items and calculated subtotal and total values.
 namespace AHInteriorsERP.Models
 {
     public class Order

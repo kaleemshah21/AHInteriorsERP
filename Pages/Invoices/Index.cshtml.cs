@@ -7,7 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-
+// This file loads the invoice list and handles searching,
+// sorting and pagination for invoice records.
 namespace AHInteriorsERP.Pages.Invoices
 {
     [Authorize(Roles = "Admin,Staff")]

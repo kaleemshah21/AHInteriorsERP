@@ -8,7 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+// This file loads the selected product and disables it instead of deleting it,
+// so previous orders and invoices remain accurate.
 namespace AHInteriorsERP.Pages.Products
 {
     [Authorize(Roles = "Admin,Staff,Warehouse")]

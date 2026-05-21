@@ -6,7 +6,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
-
+// This file handles creating new orders, creating customers if needed,
+// validating stock and saving order items to the database.
 namespace AHInteriorsERP.Pages.Orders
 {
     [Authorize(Roles = "Admin,Staff,Warehouse")]

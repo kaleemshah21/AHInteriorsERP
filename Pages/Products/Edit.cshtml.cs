@@ -9,7 +9,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+// This file loads an existing product and saves any changes,
+// including stock, price, location and active status.
 namespace AHInteriorsERP.Pages.Products
 {
     [Authorize(Roles = "Admin,Staff,Warehouse")]

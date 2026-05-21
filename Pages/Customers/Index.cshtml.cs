@@ -8,6 +8,9 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
+// This file loads the customer list and handles searching,
+// sorting and pagination for customer records.
+
 namespace AHInteriorsERP.Pages.Customers
 {
     [Authorize(Roles = "Admin,Staff")]

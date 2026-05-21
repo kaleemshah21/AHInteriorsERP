@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+// This file loads the selected customer and their order history.
 namespace AHInteriorsERP.Pages.Customers
 {
     [Authorize(Roles = "Admin,Staff")]

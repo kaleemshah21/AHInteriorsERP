@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
-
+// This model stores a snapshot of each product line on an invoice,
+// so invoice records remain accurate even if product details change later.
 namespace AHInteriorsERP.Models
 {
     public class InvoiceItem

@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+// This file loads the selected invoice with its customer,
+// order and invoice item details for display and printing.
 namespace AHInteriorsERP.Pages.Invoices
 {
     [Authorize(Roles = "Admin,Staff")]

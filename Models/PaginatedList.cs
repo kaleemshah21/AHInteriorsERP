@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-
+// This helper class adds pagination support for lists,
+// including page number, total pages and next/previous page checks.
 namespace AHInteriorsERP.Models
 {
     public class PaginatedList<T> : List<T>

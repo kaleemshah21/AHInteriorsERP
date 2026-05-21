@@ -1,7 +1,8 @@
 ﻿@page
 @model AHInteriorsERP.Pages.Orders.EditModel
 @using AHInteriorsERP.Models
-
+@*This page allows users to edit an existing order,
+    update order details and manage the products within the order*@
 @{
     ViewData["Title"] = "Edit Order";
     var canEditItems = Model.Order.Status == OrderStatus.Pending;

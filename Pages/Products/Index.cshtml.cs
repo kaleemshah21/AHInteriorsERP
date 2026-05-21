@@ -7,7 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-
+// This file loads the product list and handles searching, sorting,
+// pagination and reserved stock calculations.
 namespace AHInteriorsERP.Pages.Products
 {
     [Authorize(Roles = "Admin,Staff,Warehouse")]

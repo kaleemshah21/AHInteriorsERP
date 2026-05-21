@@ -9,6 +9,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+
+// This file loads the selected order and handles deleting it
+// from the database after admin confirmation.
+
 namespace AHInteriorsERP.Pages.Orders
 {
     [Authorize(Roles = "Admin")]

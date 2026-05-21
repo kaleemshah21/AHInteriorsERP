@@ -9,6 +9,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+// This file loads the selected order with its customer,
+// order items and product details for display.
+
 namespace AHInteriorsERP.Pages.Orders
 {
     [Authorize(Roles = "Admin,Staff,Warehouse")]

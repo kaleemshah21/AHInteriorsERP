@@ -2,6 +2,8 @@
 
 namespace AHInteriorsERP.Models
 {
+    // This model stores customer information including contact details,
+    // address information and related customer orders.
     public class Customer
     {
         public int CustomerID { get; set; }

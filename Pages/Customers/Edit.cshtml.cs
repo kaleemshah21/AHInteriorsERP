@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+// This page model retrieves an existing customer record
+// and updates the customer details in the database after validation.
 namespace AHInteriorsERP.Pages.Customers
 {
     [Authorize(Roles = "Admin,Staff")]

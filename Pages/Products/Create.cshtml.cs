@@ -8,7 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+// This file handles creating new product records
+// and saving the product details to the database.
 namespace AHInteriorsERP.Pages.Products
 {
     [Authorize(Roles = "Admin,Staff,Warehouse")]

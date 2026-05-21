@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
 using System.Threading.Tasks;
 
+// This page model handles the creation of new customer records
+// and validates customer contact and address details before saving.
+
 namespace AHInteriorsERP.Pages.Customers
 {
     [Authorize(Roles = "Admin,Staff")]

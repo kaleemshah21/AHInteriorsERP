@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+// This page model retrieves a selected customer record
+// and handles deleting it from the database after confirmation.
 
 namespace AHInteriorsERP.Pages.Customers
 {

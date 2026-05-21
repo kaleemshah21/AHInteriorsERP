@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
-
+// This model stores product information including SKU, price,
+// stock quantity, warehouse location and active status.
 namespace AHInteriorsERP.Models
 {
     public class Product

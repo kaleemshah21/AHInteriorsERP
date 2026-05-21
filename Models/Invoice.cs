@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
-
+// This model stores invoice details for completed orders,
+// including invoice totals, discounts and related invoice items.
 namespace AHInteriorsERP.Models
 {
     public class Invoice
